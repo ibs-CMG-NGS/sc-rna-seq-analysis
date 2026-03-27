@@ -1,0 +1,58 @@
+# src/Snakefile
+# scRNA-seq 3차 분석 파이프라인 메인 워크플로우
+#
+# 실행 방법:
+#   snakemake --snakefile src/Snakefile --cores 4
+#   snakemake --snakefile src/Snakefile --dryrun   # 실행 계획만 확인
+#
+# 특정 데이터셋만:
+#   snakemake --snakefile src/Snakefile --cores 4 \
+#     output/checkpoints/human_genes_only/07_clustered.h5ad
+
+import os
+from pathlib import Path
+
+# =============================================================================
+# 설정 파일 로드
+# =============================================================================
+configfile: "../configs/pipeline.yaml"
+configfile: "../configs/samples.yaml"
+
+# =============================================================================
+# 처리할 데이터셋 목록 (run_in_pipeline: true 인 것만)
+# =============================================================================
+DATASETS = [
+    name
+    for name, meta in config["datasets"].items()
+    if meta.get("run_in_pipeline", True)
+]
+
+# =============================================================================
+# rule 파일 포함
+# =============================================================================
+include: "rules/qc.smk"
+include: "rules/normalize.smk"
+include: "rules/hvg.smk"
+include: "rules/dim_reduction.smk"
+include: "rules/clustering.smk"
+
+# =============================================================================
+# Target rule — 최종 출력물 정의
+# =============================================================================
+rule all:
+    input:
+        # 최종 클러스터링 결과
+        expand(
+            "output/checkpoints/{dataset}/07_clustered.h5ad",
+            dataset=DATASETS
+        ),
+        # QC 시각화
+        expand(
+            "output/figures/qc/{dataset}/violin_filtered.png",
+            dataset=DATASETS
+        ),
+        # UMAP 시각화
+        expand(
+            "output/figures/umap/{dataset}/umap_clusters.png",
+            dataset=DATASETS
+        ),

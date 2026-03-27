@@ -1,0 +1,79 @@
+# configs/markers.yaml
+# Cell type 마커 유전자 목록
+# notebooks/02_cell_type_annotation.ipynb 에서 dotplot, violin plot에 사용됨
+
+T_cells:
+  CD4_T:
+    markers: ["CD3D", "CD3E", "CD4", "IL7R", "CCR7"]
+    description: "CD4+ T cells (naive/memory)"
+  CD8_T:
+    markers: ["CD3D", "CD3E", "CD8A", "CD8B", "GZMB", "PRF1"]
+    description: "CD8+ cytotoxic T cells"
+  Treg:
+    markers: ["CD3D", "FOXP3", "IL2RA", "CTLA4", "TIGIT"]
+    description: "Regulatory T cells"
+  NK:
+    markers: ["NCAM1", "NKG7", "GNLY", "KLRD1", "KLRB1"]
+    description: "Natural killer cells"
+  NKT:
+    markers: ["CD3D", "NKG7", "GNLY", "KLRB1"]
+    description: "NKT cells"
+
+B_cells:
+  B_naive:
+    markers: ["MS4A1", "CD19", "CD79A", "IGHD", "IGHM"]
+    description: "Naive B cells"
+  B_memory:
+    markers: ["MS4A1", "CD19", "CD79A", "CD27", "AIM2"]
+    description: "Memory B cells"
+  Plasma:
+    markers: ["JCHAIN", "MZB1", "SDC1", "IGHG1", "IGKC"]
+    description: "Plasma cells / plasmablasts"
+
+Myeloid:
+  Monocyte_classical:
+    markers: ["CD14", "LYZ", "S100A8", "S100A9", "FCN1"]
+    description: "Classical monocytes (CD14++)"
+  Monocyte_nonclassical:
+    markers: ["FCGR3A", "MS4A7", "CX3CR1", "CDKN1C"]
+    description: "Non-classical monocytes (CD16+)"
+  cDC1:
+    markers: ["CLEC9A", "XCR1", "CADM1", "CLNK"]
+    description: "Conventional DC type 1"
+  cDC2:
+    markers: ["FCER1A", "CD1C", "CLEC10A", "FCGR2B"]
+    description: "Conventional DC type 2"
+  pDC:
+    markers: ["LILRA4", "CLEC4C", "IL3RA", "GZMB"]
+    description: "Plasmacytoid DC"
+  Macrophage:
+    markers: ["CD68", "MRC1", "MSR1", "C1QA", "C1QB"]
+    description: "Macrophages"
+  Neutrophil:
+    markers: ["S100A8", "S100A9", "FCGR3B", "CXCR2"]
+    description: "Neutrophils"
+  Mast:
+    markers: ["TPSAB1", "CPA3", "KIT", "HPGD"]
+    description: "Mast cells"
+
+Epithelial:
+  Epithelial:
+    markers: ["EPCAM", "KRT8", "KRT18", "CDH1", "KRT19"]
+    description: "Epithelial cells"
+
+Stromal:
+  Fibroblast:
+    markers: ["COL1A1", "COL1A2", "DCN", "LUM", "FAP"]
+    description: "Fibroblasts"
+  Endothelial:
+    markers: ["PECAM1", "VWF", "CDH5", "CLDN5", "ENG"]
+    description: "Endothelial cells"
+
+# 범용 마커 (QC 참고용)
+universal:
+  proliferating:
+    markers: ["MKI67", "TOP2A", "PCNA", "TYMS"]
+    description: "Proliferating cells"
+  apoptotic:
+    markers: ["CASP3", "CASP9", "BAX", "BCL2"]
+    description: "Apoptotic markers"

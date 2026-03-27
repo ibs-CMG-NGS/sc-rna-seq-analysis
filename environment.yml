@@ -1,0 +1,70 @@
+name: sc-rna-seq-analysis
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+
+dependencies:
+  # Core Python
+  - python=3.10
+
+  # Workflow manager (minimal, no cloud deps)
+  - snakemake-minimal=7.32.4
+
+  # Core single-cell stack
+  - scanpy=1.10.1
+  - anndata=0.10.7
+  - leidenalg=0.10.2
+  - python-igraph=0.11.6
+
+  # Doublet detection
+  - scrublet=0.2.3
+
+  # Dimensionality reduction / neighbors
+  - umap-learn=0.5.6
+  - pynndescent=0.5.13
+
+  # Numerical / data
+  - numpy=1.26.4
+  - pandas=2.2.2
+  - scipy=1.13.1
+  - scikit-learn=1.5.0
+
+  # Visualization
+  - matplotlib=3.8.4
+  - seaborn=0.13.2
+
+  # Jupyter
+  - jupyterlab=4.2.0
+  - ipykernel=6.29.4
+  - ipywidgets=8.1.3
+  - nbconvert=7.16.4
+
+  # File I/O
+  - h5py=3.11.0
+  - hdf5=1.14.3
+
+  # Utilities
+  - tqdm=4.66.4
+  - pyyaml=6.0.1
+  - rich=13.7.1
+  - click=8.1.7
+
+  # pip-only packages
+  - pip
+  - pip:
+      # Cell type annotation
+      - celltypist==1.6.3
+
+      # Pathway / TF activity
+      - decoupler==1.8.0
+
+      # Batch correction
+      - harmonypy==0.0.10
+
+      # Trajectory (BAM 없는 경우 대안)
+      - cytotrace2==0.1.0
+
+      # Trajectory (BAM 있는 경우) — BAM 파일 확인 후 설치
+      # - scvelo==0.3.2
+      # - velocyto==0.17.17

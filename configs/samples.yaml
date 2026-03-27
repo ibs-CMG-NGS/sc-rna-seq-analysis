@@ -1,0 +1,107 @@
+# configs/samples.yaml
+# 입력 데이터셋 등록 및 샘플 메타데이터
+#
+# format 옵션: h5ad | 10x_mtx | 10x_h5 | loom | csv | auto
+#   - auto: 파일 확장자/경로 타입으로 자동 감지
+#   - 10x_mtx: path는 디렉토리 경로 (barcodes.tsv.gz, features.tsv.gz, matrix.mtx.gz 포함)
+
+# =============================================================================
+# 데이터셋 (Snakemake wildcard {dataset} 로 사용됨)
+# =============================================================================
+datasets:
+
+  # 인간 세포 + 인간 유전자만 — 메인 분석 대상
+  human_genes_only:
+    path: "data/all-sample/DGE_filtered/human_ratio95_humanGenesOnly.h5ad"
+    format: "h5ad"
+    species: "human"
+    description: "Human cells (ratio>95%), human genes only"
+    run_in_pipeline: true
+
+  # 인간 세포 + 전체 유전자 (인간+마우스+eGFP)
+  human_all_genes:
+    path: "data/all-sample/DGE_filtered/human_ratio95_cells.h5ad"
+    format: "h5ad"
+    species: "human"
+    description: "Human cells (ratio>95%), all genes"
+    run_in_pipeline: false   # 필요 시 true로 변경
+
+  # EGFP 양성 세포 + 인간 유전자
+  egfp_genes_only:
+    path: "data/all-sample/DGE_filtered/human_ratio95_EGFPpos_humanGenesOnly.h5ad"
+    format: "h5ad"
+    species: "human"
+    description: "EGFP+ cells, human genes only"
+    run_in_pipeline: true
+
+  # EGFP 양성 세포 + 전체 유전자
+  egfp_all_genes:
+    path: "data/all-sample/DGE_filtered/human_ratio95_EGFPpos_cells.h5ad"
+    format: "h5ad"
+    species: "human"
+    description: "EGFP+ cells, all genes"
+    run_in_pipeline: false
+
+  # 전체 raw mixed (인간+마우스+eGFP) — 수동 분석용
+  raw_mixed:
+    path: "data/all-sample/DGE_filtered/trailmaker_raw_mixed.h5ad"
+    format: "h5ad"
+    species: "mixed"
+    description: "Full raw mixed (human+mouse+eGFP), 3.0GB"
+    run_in_pipeline: false   # 크기가 크므로 기본 제외
+
+  # -------------------------------------------------------------------------
+  # 미래 데이터셋 추가 예시 (비활성화 상태)
+  # -------------------------------------------------------------------------
+  # 10x Genomics CellRanger MTX 포맷:
+  # new_10x_sample:
+  #   path: "data/new_sample/filtered_feature_bc_matrix/"
+  #   format: "10x_mtx"
+  #   species: "human"
+  #   run_in_pipeline: true
+  #
+  # CellRanger H5 포맷:
+  # new_h5_sample:
+  #   path: "data/new_sample/filtered_feature_bc_matrix.h5"
+  #   format: "10x_h5"
+  #   species: "human"
+  #   run_in_pipeline: true
+
+# =============================================================================
+# 샘플 메타데이터 (adata.obs에 추가됨)
+# sample 칼럼명은 h5ad 내 obs 칼럼명과 일치해야 함
+# condition은 샘플 조건 확인 후 채울 것
+# =============================================================================
+samples:
+  APC_1:
+    condition: "unknown"    # 조건 확인 후 업데이트 (예: "treatment", "control")
+    replicate: 1
+  APC_2:
+    condition: "unknown"
+    replicate: 2
+  APC_3:
+    condition: "unknown"
+    replicate: 3
+  APC_4:
+    condition: "unknown"
+    replicate: 4
+  APC_5:
+    condition: "unknown"
+    replicate: 5
+  APC_6:
+    condition: "unknown"
+    replicate: 6
+  APC_7:
+    condition: "unknown"
+    replicate: 7
+  APC_8:
+    condition: "unknown"
+    replicate: 8
+
+# =============================================================================
+# Velocity 관련 경로 (선택)
+# BAM 파일 또는 loom 파일 경로. 없으면 비워둠.
+# =============================================================================
+velocity:
+  bam_dir: ""           # BAM 파일 디렉토리 (velocyto 실행용). 예: "data/bam/"
+  loom_dir: ""          # 이미 생성된 loom 파일 디렉토리. 예: "data/loom/"
