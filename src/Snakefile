@@ -35,6 +35,7 @@ include: "rules/normalize.smk"
 include: "rules/hvg.smk"
 include: "rules/dim_reduction.smk"
 include: "rules/clustering.smk"
+include: "rules/velocity.smk"
 
 # =============================================================================
 # Target rule — 최종 출력물 정의
@@ -56,3 +57,10 @@ rule all:
             "output/figures/umap/{dataset}/umap_clusters.png",
             dataset=DATASETS
         ),
+        # RNA velocity (BAM 파일이 설정된 경우에만)
+        *([
+            expand(
+                "output/velocity/loom/{dataset}/merged.loom",
+                dataset=DATASETS,
+            )
+        ] if config.get("velocity", {}).get("bam_dir") and config.get("velocity", {}).get("gtf") else []),

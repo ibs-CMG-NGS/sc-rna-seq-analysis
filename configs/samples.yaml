@@ -104,4 +104,6 @@ samples:
 # =============================================================================
 velocity:
   bam_dir: ""           # BAM 파일 디렉토리 (velocyto 실행용). 예: "data/bam/"
+                        # BAM 파일명 규칙: {bam_dir}/{sample}.bam (예: data/bam/APC_1.bam)
   loom_dir: ""          # 이미 생성된 loom 파일 디렉토리. 예: "data/loom/"
+                        # Snakemake 사용 시 자동 생성: output/velocity/loom/{dataset}/merged.loom

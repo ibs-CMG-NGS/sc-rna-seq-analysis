@@ -73,3 +73,15 @@ genome:
 output:
   figure_dpi: 150
   figure_format: "png"       # png | svg | pdf
+
+# =============================================================================
+# RNA Velocity (velocyto + scVelo)
+# =============================================================================
+velocity:
+  gtf: ""                  # 필수: 게놈 GTF 파일 경로. 예: "data/ref/Homo_sapiens.GRCh38.110.gtf"
+  repeat_mask_gtf: ""      # 선택: repeat mask GTF (velocyto -m 옵션). 예: "data/ref/hg38_rmsk.gtf"
+  samtools_threads: 4      # BAM 정렬에 사용할 samtools 스레드 수
+  scvelo_mode: "dynamical" # 'stochastic' (빠름) | 'dynamical' (정확, 권장)
+  n_top_genes: 2000        # scVelo 전처리에 사용할 HVG 수
+  min_shared_counts: 20    # spliced/unspliced 최소 공유 카운트
+  n_jobs: 4                # recover_dynamics 병렬 작업 수 (dynamical 모드)
