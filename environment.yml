@@ -63,7 +63,8 @@ dependencies:
       - harmonypy==0.0.10
 
       # Trajectory (BAM 없는 경우 대안)
-      - cytotrace2==0.1.0
+      # cytotrace2==0.1.0
+      - git+https://github.com/digitalcytometry/cytotrace2.git
 
       # Trajectory (BAM 있는 경우) — BAM 파일 확인 후 설치
       # - scvelo==0.3.2
