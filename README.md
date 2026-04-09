@@ -67,16 +67,21 @@ sc-rna-seq-analysis/
 | `samtools sort/index` | BAM 전처리 (velocyto 전 필수) |
 
 ```bash
-# 서버에서 실행
-samtools sort -@ 4 -o barcode_headAligned_anno.sorted.bam \
-    data/all-sample/barcode_headAligned_anno.bam
-samtools index barcode_headAligned_anno.sorted.bam
+# BAM 구조 (Split-pipe 출력):
+#   {bam_dir}/output_APC_1/barcode_headAligned_anno.sorted.bam
+#   {bam_dir}/output_APC_2/barcode_headAligned_anno.sorted.bam  ... (이미 sorted)
 
+# configs/pipeline.yaml 에 GTF 경로 설정 후 Snakemake로 실행 (권장):
+snakemake --snakefile src/Snakefile --cores 8 \
+    output/velocity/loom/human_genes_only/merged.loom
+
+# 또는 수동으로 샘플별 실행:
+samtools index output_APC_1/barcode_headAligned_anno.sorted.bam
 velocyto run \
-    -b all_barcodes.tsv \
+    -b APC_1_barcodes.tsv \
     -m /path/to/hg38_rmsk.gtf \        # 선택사항 (권장)
     -o output/velocity/loom/ \
-    barcode_headAligned_anno.sorted.bam \
+    output_APC_1/barcode_headAligned_anno.sorted.bam \
     /path/to/genes.gtf
 
 # 완료 후 loom 파일만 로컬로 복사

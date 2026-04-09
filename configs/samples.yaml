@@ -103,7 +103,9 @@ samples:
 # BAM 파일 또는 loom 파일 경로. 없으면 비워둠.
 # =============================================================================
 velocity:
-  bam_dir: ""           # BAM 파일 디렉토리 (velocyto 실행용). 예: "data/bam/"
-                        # BAM 파일명 규칙: {bam_dir}/{sample}.bam (예: data/bam/APC_1.bam)
+  bam_dir: ""           # Split-pipe BAM 상위 디렉토리. 예: "/data/run1"
+                        # 구조: {bam_dir}/output_{sample}/barcode_headAligned_anno.sorted.bam
+                        # 예)   /data/run1/output_APC_1/barcode_headAligned_anno.sorted.bam
+  bam_filename: "barcode_headAligned_anno.sorted.bam"   # 각 output_{sample}/ 내 BAM 파일명
   loom_dir: ""          # 이미 생성된 loom 파일 디렉토리. 예: "data/loom/"
                         # Snakemake 사용 시 자동 생성: output/velocity/loom/{dataset}/merged.loom

@@ -3,8 +3,11 @@
 #
 # 전제 조건:
 #   configs/pipeline.yaml 의 velocity.gtf 에 GTF 파일 경로 설정
-#   configs/samples.yaml 의 velocity.bam_dir 에 BAM 디렉토리 경로 설정
-#   BAM 파일명: {bam_dir}/{sample}.bam  (예: data/bam/APC_1.bam)
+#   configs/samples.yaml 의 velocity.bam_dir 에 BAM 상위 디렉토리 경로 설정
+#
+# BAM 파일 구조 (Parse Biosciences Split-pipe 출력):
+#   {bam_dir}/output_{sample}/barcode_headAligned_anno.sorted.bam
+#   예) /data/run1/output_APC_1/barcode_headAligned_anno.sorted.bam
 #
 # 실행 방법:
 #   snakemake --snakefile src/Snakefile --cores 8 \
@@ -16,24 +19,19 @@ _vel_cfg = config.get("velocity", {})
 _bam_dir  = _vel_cfg.get("bam_dir", "")
 _loom_dir = _vel_cfg.get("loom_dir", "")
 _gtf      = _vel_cfg.get("gtf", "")
+_bam_name = _vel_cfg.get("bam_filename", "barcode_headAligned_anno.sorted.bam")
 
 # velocity 룰은 bam_dir + gtf 가 설정된 경우에만 활성화
 if _bam_dir and _gtf:
 
-    rule bam_sort_index:
-        """coordinate-sort + BAI 인덱스 생성 (velocyto 필수 요건)"""
+    rule bam_index:
+        """BAI 인덱스 생성 (BAM은 이미 sorted, velocyto 필수 요건)"""
         input:
-            bam = str(Path(_bam_dir) / "{sample}.bam"),
+            bam = str(Path(_bam_dir) / "output_{sample}" / _bam_name),
         output:
-            bam = "output/velocity/bam/{sample}.sorted.bam",
-            bai = "output/velocity/bam/{sample}.sorted.bam.bai",
-        threads:
-            config.get("velocity", {}).get("samtools_threads", 4)
+            bai = str(Path(_bam_dir) / "output_{sample}" / (_bam_name + ".bai")),
         shell:
-            """
-            samtools sort -@ {threads} -o {output.bam} {input.bam}
-            samtools index {output.bam}
-            """
+            "samtools index {input.bam}"
 
     rule extract_barcodes:
         """h5ad에서 샘플별 바코드 TSV 추출 (velocyto -b 옵션 입력)"""
@@ -58,8 +56,8 @@ if _bam_dir and _gtf:
     rule velocyto_run:
         """velocyto run: BAM → loom (spliced / unspliced / ambiguous counts)"""
         input:
-            bam      = "output/velocity/bam/{sample}.sorted.bam",
-            bai      = "output/velocity/bam/{sample}.sorted.bam.bai",
+            bam      = str(Path(_bam_dir) / "output_{sample}" / _bam_name),
+            bai      = str(Path(_bam_dir) / "output_{sample}" / (_bam_name + ".bai")),
             barcodes = "output/velocity/barcodes/{dataset}/{sample}.tsv",
             gtf      = _gtf,
         output:
